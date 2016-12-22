@@ -4,12 +4,12 @@ from flask_login import LoginManager
 import logging
 from logging.handlers import RotatingFileHandler
 
-
 app = Flask(__name__)
-app.config.from_object('config')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+app.config.from_object('config')
 
 if not app.debug:
     file_handler = RotatingFileHandler('../tmp/microblog.log', 'a', 1 * 1024 * 1024, 10)
@@ -20,4 +20,4 @@ if not app.debug:
     app.logger.info('microblog startup')
 
 ## 注册http接口请求
-from app import views
+from app import views,route
