@@ -1,16 +1,16 @@
-CREATE DATABASE IF NOT EXISTS jxcms DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-USE jxcms;
+CREATE DATABASE IF NOT EXISTS micro_cms DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+USE micro_cms;
 
 
 /* 用户表 */
 DROP TABLE IF EXISTS sys_user;
 CREATE TABLE sys_user (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  lastlogintime datetime DEFAULT NULL COMMENT '登录时间',
+  last_login_time datetime DEFAULT NULL COMMENT '登录时间',
   password varchar(32) NOT NULL COMMENT '密码',
   name varchar(30) DEFAULT NULL COMMENT '显示的名字',
   role smallint(6) NOT NULL DEFAULT 0 COMMENT '角色',
-  loginname varchar(30) NOT NULL COMMENT '登录名',
+  login_name varchar(30) NOT NULL COMMENT '登录名',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -19,7 +19,6 @@ CREATE TABLE sys_user (
 */
 
 DROP TABLE IF EXISTS cms_article;
-DROP TABLE IF EXISTS cms_article_data;
 DROP TABLE IF EXISTS cms_category;
 
 DROP TABLE IF EXISTS cms_link;
@@ -35,6 +34,7 @@ CREATE TABLE cms_article
     image varchar(255) COMMENT '文章图片',
     keywords varchar(255) COMMENT '关键字',
     description varchar(255) COMMENT '描述、摘要',
+    content text COMMENT '文章内容',
     weight int DEFAULT 0 COMMENT '权重，越大越靠前',
     weight_date datetime COMMENT '权重期限',
     hits int DEFAULT 0 COMMENT '点击数',
@@ -45,15 +45,6 @@ CREATE TABLE cms_article
     del_flag char(1) DEFAULT '0' NOT NULL COMMENT '删除标记',
     PRIMARY KEY (id)
 ) COMMENT = '文章表';
-
-
-CREATE TABLE cms_article_data
-(
-    id int(11) NOT NULL COMMENT '编号',
-    content text COMMENT '文章内容',
-    PRIMARY KEY (id)
-) COMMENT = '文章详表';
-
 
 CREATE TABLE cms_category
 (

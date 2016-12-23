@@ -84,11 +84,4 @@ def strerr(errcode, param_dict = None):
 
 
 
-# 教育程度/学位 ID-名称，对应表
-DEGREE_DICT = {
-    1: u"初中",
-    2: u"高中",
-    3: u"大学",
-    4: u"硕士",
-    5: u"博士"
-}
+

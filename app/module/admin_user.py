@@ -30,7 +30,7 @@ class AdminUserService:
         if t is not None:
             total = int(t["count"])
 
-        sql_str_list = ['SELECT id, loginname, name FROM sys_user']
+        sql_str_list = ['SELECT id, login_name, name FROM sys_user']
         sql_var_list = []
         if len(where_list) > 0:
             sql_str_list.extend(['WHERE', ' AND '.join(where_list)])
@@ -51,7 +51,7 @@ class AdminUserService:
 
     def getAdminUserInfo(self, db_conn, admin_id):
         cursor = db_conn.cursor()
-        sql_str_list = ['SELECT id, loginname, name FROM sys_user WHERE id=%s']
+        sql_str_list = ['SELECT id, login_name, name FROM sys_user WHERE id=%s']
         cursor.execute(' '.join(sql_str_list), [admin_id])
         result = cursor.fetchone()
         cursor.close()
@@ -60,7 +60,7 @@ class AdminUserService:
     def verifyLogin(self, db_conn, login_name, password):
         cursor = db_conn.cursor()
         password_md5 = util.getMD5(password)
-        cursor.execute("SELECT id, name FROM sys_user WHERE loginname=%s AND password=%s",
+        cursor.execute("SELECT id, name FROM sys_user WHERE login_name=%s AND password=%s",
                        [login_name, password_md5])
         t = cursor.fetchone()
         cursor.close()
@@ -74,7 +74,7 @@ class AdminUserService:
         #new_id = 'A' + str(uuid.uuid1()).replace('-', '')
         password_md5 = util.getMD5(param_dict['password'])
         cursor = db_conn.cursor()
-        cursor.execute('INSERT sys_user(loginname, name, password, lastlogintime) '
+        cursor.execute('INSERT sys_user(login_name, name, password, last_login_time) '
                        ' VALUES(%s, %s, %s, NOW())',
                        [
                         param_dict.get('login_name'),
@@ -85,7 +85,7 @@ class AdminUserService:
     
     def doesAdminExist(self, db_conn, login_name, exclude_id=None):
         cursor = db_conn.cursor()
-        sql_str_list = ["SELECT id FROM sys_user WHERE loginname=%s"]
+        sql_str_list = ["SELECT id FROM sys_user WHERE login_name=%s"]
         sql_var_list = [login_name]
         if exclude_id != None:
             sql_str_list.append("AND id!=%s")
@@ -103,7 +103,7 @@ class AdminUserService:
         for k, v in param_dict.iteritems():
             cursor.execute('UPDATE sys_user SET ' + k +'=%s WHERE id=%s',
                            [v, user_id])
-        cursor.execute('UPDATE sys_user SET lastlogintime=NOW() WHERE id=%s',
+        cursor.execute('UPDATE sys_user SET last_login_time=NOW() WHERE id=%s',
                        [user_id])
         cursor.close()
         return const.ERRCODE_SUCC
@@ -120,7 +120,7 @@ class AdminUserService:
             return const.ERRCODE_NO_SUCH_USER_OR_WRONG_PASSWORD
         
         new_password_md5 = util.getMD5(param_dict['password'])
-        cursor.execute('UPDATE sys_user SET password=%s, lastlogintime=NOW() WHERE id=%s',
+        cursor.execute('UPDATE sys_user SET password=%s, last_login_time=NOW() WHERE id=%s',
                        [new_password_md5, user_id])
         cursor.close()
         return const.ERRCODE_SUCC
